@@ -182,6 +182,7 @@ for pkg in \
 	ros-jazzy-v4l2-camera \
 	ros-jazzy-vision-opencv \
 	ros-jazzy-camera-info-manager \
+	ros-jazzy-tf-transformations \
 	ros-jazzy-rviz2; do
 	if ! dpkg -s "$pkg" >/dev/null 2>&1; then
 		missing_pkgs+=("$pkg")
