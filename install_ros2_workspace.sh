@@ -322,6 +322,9 @@ if [ -f "$overlay_setup" ]; then
 else
 	echo "Warning: overlay setup not found at $overlay_setup"
 fi
+if ! grep -q "RCUTILS_COLORIZED_OUTPUT" ~/.bashrc; then
+	echo "export RCUTILS_COLORIZED_OUTPUT=1" >> ~/.bashrc
+fi
 
 echo
 echo "===================================="
