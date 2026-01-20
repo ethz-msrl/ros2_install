@@ -38,8 +38,9 @@ The `install_ros2_workspace.sh` script performs the following actions in order:
    - `Tesla_ros2`
    Each one is built with `colcon build --symlink-install`, and after each build the script
    sources the corresponding `install/setup.bash` to overlay the environment for the next build.
-9. Adds the final overlay to your shell startup:
+9. Adds the final overlay and colorized output to your shell startup:
    - It appends `source <ws>/tesla/install/setup.bash` to `~/.bashrc` if not already present.
+   - It appends `export RCUTILS_COLORIZED_OUTPUT=1` to `~/.bashrc` if not already present.
 10. Prints a summary of what was installed and which repositories are present.
 
 ## Overlay behavior and how to use it
