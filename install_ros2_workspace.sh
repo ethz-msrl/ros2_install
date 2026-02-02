@@ -165,6 +165,26 @@ else
 	echo "Error: /opt/pylon/bin/pylon-setup-env.sh not found. Pylon install may have failed."
 	exit 1
 fi
+if ! command -v rosdep >/dev/null 2>&1; then
+	echo "rosdep not found; installing python3-rosdep..."
+	if command -v sudo >/dev/null 2>&1; then
+		sudo apt update
+		sudo apt install -y python3-rosdep
+	else
+		apt update
+		apt install -y python3-rosdep
+	fi
+fi
+if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
+	echo "Initializing rosdep..."
+	if command -v sudo >/dev/null 2>&1; then
+		sudo rosdep init
+	else
+		rosdep init
+	fi
+fi
+echo "Updating rosdep..."
+rosdep update
 missing_pkgs=()
 if ! command -v colcon >/dev/null 2>&1; then
 	missing_pkgs+=("python3-colcon-common-extensions")
@@ -296,6 +316,28 @@ fi
 source install/setup.bash
 cd ..
 
+#Cloning and building Octomag_ros2
+echo
+echo "Getting the Octomag_ros2 repo from Github"
+mkdir -p octomag/src
+if ! git clone git@github.com:ethz-msrl/Octomag_ros2.git "$ws_dir/octomag/src/Octomag_ros2"; then
+	echo
+	echo "Clone failed for Octomag_ros2. This often means your SSH key is not added to GitHub."
+	echo "Re-run the script and follow the instuctions to copy your key."
+	exit 1
+fi
+cd octomag
+if ! rosdep install --from-paths src --ignore-src -r -y; then
+	echo "rosdep install failed for Octomag_ros2."
+	exit 1
+fi
+if ! colcon build --symlink-install; then
+	echo "Build failed for Octomag_ros2."
+	exit 1
+fi
+source install/setup.bash
+cd ..
+
 #Cloning and building Tesla_ros2
 echo
 echo "Getting the Tesla_ros2 repo from Github"
@@ -350,6 +392,7 @@ for repo_dir in \
 	"$ws_dir/ads_ament/src/ads_ament" \
 	"$ws_dir/tesla_core/src/Tesla_core_ros2" \
 	"$ws_dir/navion/src/Navion_ros2" \
+	"$ws_dir/octomag/src/Octomag_ros2" \
 	"$ws_dir/tesla/src/Tesla_ros2"; do
 	if [ -d "$repo_dir" ]; then
 		echo "Repo: $repo_dir (OK)"
