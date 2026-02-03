@@ -55,3 +55,7 @@ That means:
 - New terminals will automatically have the full overlay active.
 - The installer already sourced the overlays during the run, so the current session is also set up.
   If you want to reapply it manually, you can run `source ~/.bashrc`, but it should not be required.
+
+## Update install shell script
+To update, change or adjust the shell script go into the develop branch.
+In the develop branch you can find a script that opens a docker container and runs the install script in there for testing.
