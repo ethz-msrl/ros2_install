@@ -35,6 +35,7 @@ The `install_ros2_workspace.sh` script performs the following actions in order:
    - `ads_ament`
    - `Tesla_core_ros2`
    - `Navion_ros2`
+   - `Octomag_ros2`
    - `Tesla_ros2`
    Each one is built with `colcon build --symlink-install`, and after each build the script
    sources the corresponding `install/setup.bash` to overlay the environment for the next build.
